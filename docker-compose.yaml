@@ -1,0 +1,101 @@
+version: '3.8'
+#networks:
+#  tms-network:
+#    driver: bridge
+#    ipam:
+#      driver: default
+services:
+  postgres:
+    image: postgres:13.4
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=opefrvtms
+#    networks:
+#      - tms-network
+  artemis:
+    image: amusarra/apache-artemis:2.16.0
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+    volumes:
+      - ./artemis:/var/lib/artemis/data
+    environment:
+      - ARTEMIS_USERNAME=admin
+      - ARTEMIS_PASSWORD=admin
+#    networks:
+#      - tms-network
+  ignite:
+    image: apacheignite/ignite:2.14.0
+    platform: linux/amd64
+    mem_reservation: 2048m
+    ports:
+      - "10800:10800"
+      - "47500:47500"
+    volumes:
+      - ./ignite:/opt/ignite/work
+#    networks:
+#      - tms-network
+  cassandra:
+    image: cassandra:4.0.1
+    ports:
+      - "9042:9042"
+    volumes:
+      - ./cassandra:/var/lib/cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=tmstmm
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - CASSANDRA_DC=dc1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_SEEDS=cassandra
+      - CASSANDRA_AUTO_BOOTSTRAP=true
+      - CASSANDRA_NUM_TOKENS=1
+      - CASSANDRA_START_RPC=true
+      - CASSANDRA_RPC_ADDRESS=
+#    networks:
+#      - tms-network
+  elasticsearch:
+    image: elasticsearch:7.17.16
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      - discovery.type=single-node
+      - cluster.name=tmstmm
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+#    networks:
+#      - tms-network
+  cloudconfig:
+    image: cloudconfig-tms:v1
+    ports:
+      - "8888:8888"
+    volumes:
+      - ../tms-configuration:/opt/cloudconfig
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
+#    networks:
+#      - tms-network
+  topologycachemng:
+    image: topologycachemng-tms:1.0.9-SNAPSHOT
+    ports:
+      - "9090:9090"
+#    depends_on:
+#      cloudconfig:
+#        condition: service_healthy
+#    links:
+#      - cloudconfig
+#    networks:
+#      - tms-network
