@@ -30,8 +30,7 @@ services:
     volumes:
       - ./ignite:/opt/ignite/work
   cassandra:
-#    image: cassandra:4.0.1
-    image: cassandra-trigger-elastic:latest
+    image: filipmorrys/cassandra-trigger-elastic:latest
     ports:
       - "9042:9042"
     volumes:
