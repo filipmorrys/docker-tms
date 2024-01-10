@@ -5,13 +5,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=opefrvtms
   artemis:
-    image: amusarra/apache-artemis:2.16.0
+    image: quay.io/artemiscloud/activemq-artemis-broker-init:artemis.2.28.0
     ports:
       - "8161:8161"
       - "61616:61616"
@@ -20,9 +20,10 @@ services:
     environment:
       - ARTEMIS_USER=admin
       - ARTEMIS_PASSWORD=admin
+      - AMQ_USER=admin
+      - AMQ_PASSWORD=admin
   ignite:
-    image: apacheignite/ignite:2.14.0
-    platform: linux/amd64
+    image: apacheignite/ignite:2.14.0-jdk11
     mem_reservation: 2048m
     ports:
       - "10800:10800"
@@ -71,3 +72,6 @@ services:
 #        condition: service_healthy
 #    links:
 #      - cloudconfig
+
+volumes:
+  pgdata:
