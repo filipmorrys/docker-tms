@@ -51,7 +51,7 @@ services:
         soft: -1
         hard: -1
   cloudconfig:
-    image: cloudconfig-tms:v1
+    image: filipmorrys/cloudconfig-tms:6.0.0-tms
     ports:
       - "8888:8888"
     volumes:
@@ -62,7 +62,7 @@ services:
 #      timeout: 10s
 #      retries: 5
   topologycachemng:
-    image: topologycachemng-tms:1.0.9-SNAPSHOT
+    image: filipmorrys/topologycachemng-tms:1.0.9-SNAPSHOT
     restart: always
     ports:
       - "9090:9090"
