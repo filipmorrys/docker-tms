@@ -31,7 +31,7 @@ services:
     volumes:
       - ./ignite:/opt/ignite/work
   cassandra:
-    image: filipmorrys/cassandra-trigger-elastic:latest
+    image: filipmorrys/cassandra-trigger-elastic:windows
     ports:
       - "9042:9042"
     volumes:
@@ -52,7 +52,7 @@ services:
         soft: -1
         hard: -1
   cloudconfig:
-    image: filipmorrys/cloudconfig-tms:6.0.0-tms
+    image: filipmorrys/cloudconfig-tms:6.0.0-tms-windows
     ports:
       - "8888:8888"
     volumes:
@@ -63,7 +63,7 @@ services:
 #      timeout: 10s
 #      retries: 5
   topologycachemng:
-    image: filipmorrys/topologycachemng-tms:1.0.9-SNAPSHOT
+    image: filipmorrys/topologycachemng-tms:1.0.9-windows
     restart: always
     ports:
       - "9090:9090"

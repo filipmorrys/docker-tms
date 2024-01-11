@@ -1,7 +1,7 @@
 FROM cassandra:4.0.1
 
 
-COPY cassandra-trigger-lib-6.0.0.jar $CASSANDRA_HOME/conf/triggers
+COPY cassandra-trigger-lib-99.99.99-20231009.154725-27.jar $CASSANDRA_HOME/conf/triggers
 COPY InvertedIndex.properties $CASSANDRA_HOME/conf
 
 # 7000: intra-node communication
