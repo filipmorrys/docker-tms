@@ -30,6 +30,8 @@ services:
       - "47500:47500"
     volumes:
       - ./ignite:/opt/ignite/work
+    environment:
+      - CONFIG_URI=/opt/ignite/work/ignite-config/ignite-config-tms.xml
   cassandra:
     image: filipmorrys/cassandra-trigger-elastic:windows
     ports:
@@ -47,6 +49,8 @@ services:
       - cluster.name=tmstmm
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=elastic
     ulimits:
       memlock:
         soft: -1
@@ -56,14 +60,14 @@ services:
     ports:
       - "8888:8888"
     volumes:
-      - ../tms-configuration:/opt/cloudconfig
+      - ../irl-configuration-develop:/opt/cloudconfig
 #    healthcheck:
 #      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
 #      interval: 30s
 #      timeout: 10s
 #      retries: 5
   topologycachemng:
-    image: filipmorrys/topologycachemng-tms:1.0.9-windows
+    image: filipmorrys/topologycachemng-tms:1.0.10-windows
     restart: always
     ports:
       - "9090:9090"
