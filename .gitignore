@@ -5,3 +5,4 @@ cassandra/
 elasticsearch/
 ignite/
 postgres/
+*.iml

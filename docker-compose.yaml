@@ -61,21 +61,29 @@ services:
       - "8888:8888"
     volumes:
       - ../irl-configuration-develop:/opt/cloudconfig
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
-#      interval: 30s
-#      timeout: 10s
-#      retries: 5
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8888/actuator/health"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
   topologycachemng:
     image: filipmorrys/topologycachemng-tms:1.0.10-windows
     restart: always
     ports:
       - "9090:9090"
-#    depends_on:
-#      cloudconfig:
-#        condition: service_healthy
-#    links:
-#      - cloudconfig
+    environment:
+        - SPRING_PROFILES_ACTIVE=podman
+        - SPRING_CLOUD_CONFIG_URI=http://cloudconfig:8888
+    depends_on:
+      cloudconfig:
+        condition: service_healthy
+#  notificationmng:
+#    image: artifactory.mova.indra.es/docker-opefrv/copefrvh60/tms-infra-server-notificationmanager:6.0.3-SNAPHOT
+#    ports:
+#      - "9083:8080"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=podman
+#      - SPRING_CLOUD_CONFIG_URI=http://cloudconfig:8888
 
 volumes:
   pgdata:
